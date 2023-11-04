@@ -26,3 +26,10 @@ jobs:
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/cs2304-f23-app:latest
             ${{ secrets.DOCKERHUB_USERNAME }}/cs2304-f23-app:${{ github.sha }}
+      - name: Configure kubectl
+        uses: tale/kubectl-action@v1
+        with:
+          base64-kube-config: ${{ secrets.KUBE_CONFIG }}
+
+      - name: Deploy the updated image
+        run: kubectl set image deployment/website website=${{ secrets.DOCKERHUB_USERNAME}}/cs2304-f23-app:${{ github.sha }}
